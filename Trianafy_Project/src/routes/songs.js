@@ -1,26 +1,18 @@
 import { Router } from 'express';
+import { CancionController } from '../controllers/CancionController';
+
 
 const router = Router();
 
-    router.get('/songs', (req, res) => {
-    //Contenido get
-    });
+    router.get('/', CancionController.allSongs);
 
-    router.post('/songs', (req, res) => {
-    //Contenido post
-    });
+    router.post('/', CancionController.nuevaCancion);
 
-    router.get('/songs/{id}', (req, res) => {
-    //Contenido get
-    });
+    /*router.get('/songs/{id}', CancionController.);*/
 
-    router.put('/songs/{id}', (req, res) => {
-    //Contenido put
-    });
+    router.put('/:id', CancionController.editarCancion);
 
-    router.delete('/songs/{id}', (req, res) => {
-    //Contenido delete
-    });
+    router.delete('/:id', CancionController.eliminarCancion);
 
    
 

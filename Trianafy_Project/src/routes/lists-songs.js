@@ -1,21 +1,14 @@
 import { Router } from 'express';
+import { ListaReproduccionController } from '../controllers/ListaReproduccionController';
 
 const router = Router();
 
-    router.post('/lists/{id1}/songs/{id2}', (req, res) => {
-    //Contenido post
-    });
+    router.post('/:id1/songs/:id2', ListaReproduccionController.nuevaCancionALista);
 
-    router.get('/lists/{id1}/songs', (req, res) => {
-    //Contenido get
-    });
+    router.get('/:id/songs', ListaReproduccionController.allSongsOfLista);
 
-    router.get('/lists/{id1}/songs/{id2}', (req, res) => {
-    //Contenido get
-    });
+    router.get('/:id1/songs/:id2', ListaReproduccionController.VerCancionPorIdLista);
 
-    router.delete('/lists/{id1}/songs/{id2}', (req, res) => {
-    //Contenido delete
-    });
+    router.delete('/:id1/songs/:id2', ListaReproduccionController.eliminarCancionDeLista);
 
 export default router;

@@ -1,28 +1,40 @@
+// Imports de librerías
 import "dotenv/config";
 import cors from "cors";
-import bodyParser from 'body-parser';
 import express from "express";
-import {v4 as uuidv4} from 'uuid';
+import bodyParser from "body-parser";
+import morgan from "morgan";
+import morganBody from "morgan-body";
 
+// Imports de componentes del API
 import models from './models';
 import routes from './routes';
 
-
+// Instanciación de la aplicación de Express
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(morgan('dev'))
+morganBody(app);
 
-app.use((req, res, next) => {
+
+/*app.use((req, res, next) => {
   req.context = {
     models,
     me: models.users[1],
   };
   next();
-});
+});*/
 
-app.use('/session', routes.session);
-app.use('/users', routes.user);
-app.use('/messages', routes.message);
+app.use('/songs', routes.songs);
+app.use('/lists', routes.listsOfSongs);
+app.use('/messages', routes.lists);
+
+app.listen(process.env.PORT, () =>
+  console.log(
+    `¡Aplicación de ejemplo escuchando en el puerto ${process.env.PORT}!`
+  )
+);
