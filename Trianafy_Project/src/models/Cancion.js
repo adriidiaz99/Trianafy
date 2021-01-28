@@ -1,3 +1,22 @@
+import mongoose from 'mongoose';
+const {
+    Schema
+} = mongoose;
+
+
+const cancionSchema = new Schema({
+    title: String,
+    year : Number,
+    album : String,
+    artist : String
+});
+
+export const Cancion = mongoose.model('Cancion', cancionSchema);
+
+/*
+   SI SE HUBIESE HECHO DE LA FORMA TRADICIONAL
+***************************************************
+
 export class Cancion{
 
     constructor(id, title, year, artist, album){
@@ -48,4 +67,4 @@ export class Cancion{
         this.album = value;
     }
 
-}
+}*/

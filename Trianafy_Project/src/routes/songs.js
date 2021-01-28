@@ -14,11 +14,10 @@ const router = Router();
         validar,
         CancionController.nuevaCancion);
 
-    /*router.get('/songs/{id}', CancionController.);*/
+    router.get('/:id', CancionController.cancionPorId);
 
     router.put('/:id',
-        body('id').isInt().withMessage('ID debe ser un número entero'),
-        body('title').isLength({min : 30}).withMessage("El título debe contener como máximo 30 caracteres"),
+        body('title').isLength({max : 30}).withMessage("El título debe contener como máximo 30 caracteres"),
         body('year').isInt({min : 1700}).withMessage("El año debe de ser un número entero y mayor de 1700"),
         validar,
         CancionController.editarCancion);

@@ -1,11 +1,16 @@
+/*
+    PARA EMPLEAR MODO TRADICIONAL
+**************************************
 import { Cancion } from '../models/Cancion';
 import { ListaReproduccion } from '../models/ListaReproduccion';
-import { CancionRepository, cancionRepository } from '../repository/CancionRepository';
-import { ListaReproduccionRepository, listaReproduccionRepository } from '../repository/ListaReproduccionRepository';
+
+*/
+import {cancionRepository } from '../repository/CancionRepository';
+import {listaReproduccionRepository } from '../repository/ListaReproduccionRepository';
 
 const ListaReproduccionController = {
 
-    nuevaLista : (req, res) => {
+    nuevaLista : async (req, res) => {
 
         let nuevaLista = null;
 
@@ -15,26 +20,33 @@ const ListaReproduccionController = {
 
         } else {
 
-            nuevaLista = listaReproduccionRepository.agregarListaReproduccion(new ListaReproduccion(0, req.body.name, req.body.descripcion, req.body.propietary, req.body.canciones));
+            nuevaLista = await listaReproduccionRepository.agregarLista({
+                name : req.body.name, 
+                description: req.body.descripcion, 
+                propietary : req.body.propietary, 
+                canciones : req.body.canciones});
+
             res.status(201).json(nuevaLista);
 
         }
     },
 
-    allList : (req, res) => {
+    allList : async (req, res) => {
 
-        if(listaReproduccionRepository.encontrarTodos().length > 0)
-            res.status(200).json(listaReproduccionRepository.encontrarTodos());
+        const lista = await listaReproduccionRepository.encontrarTodos();
+
+        if(lista.length > 0)
+            res.status(200).json(lista);
         
         else
             res.sendStatus(404);
     },
 
-    seeDescription : (req, res) => {
+    seeDescription : async (req, res) => {
 
-        let lista = listaReproduccionRepository.encontrarPorId(req.params.id);
+        let lista = await listaReproduccionRepository.encontrarPorId(req.params.id);
 
-        if(lista === undefined){
+        if(lista == undefined){
             res.sendStatus(404);
         } else {
             res.json(lista);  
@@ -43,40 +55,39 @@ const ListaReproduccionController = {
 
     },
 
-    editarLista : (req, res) => {
-        let listaReproduccionModificada = listaReproduccionRepository.editarListaReproduccion(new ListaReproduccion(req.params.id, req.body.name, req.body.descripcion, req.body.propietary, req.body.canciones));
-        console.log(listaReproduccionRepository.editarListaReproduccion(new ListaReproduccion(req.params.id, req.body.name, req.body.descripcion, req.body.propietary, req.body.canciones)));
+    editarLista : async (req, res) => {
+        let listaReproduccionModificada = await listaReproduccionRepository.editarLista(req.params.id,{
+            name : req.body.name, 
+            description: req.body.descripcion, 
+            propietary : req.body.propietary, 
+            canciones : req.body.canciones});
+
         if(!(listaReproduccionModificada == undefined)){
             res.sendStatus(204);
         }
         else {
-            console.log("/");
             res.sendStatus(404);
-
         }
 
     },
 
-    eliminarLista: (req, res) => {
-        if(listaReproduccionRepository.eliminarListaReproduccion(req.params.id)){
+    eliminarLista: async (req, res) => {
+        await listaReproduccionRepository.eliminarLista(req.params.id)
             res.sendStatus(204);
-        } else {
-            res.sendStatus(404);
-        }
     },
 
 
-    allSongsOfLista : (req, res) => {
+    allSongsOfLista : async (req, res) => {
         console.log(listaReproduccionRepository.encontrarPorId(req.params.id));
         res.json(listaReproduccionRepository.encontrarPorId(req.params.id));
     },
 
-    VerCancionPorIdLista : (req, res) => {
-        let lista = listaReproduccionRepository.encontrarPorId(req.params.id1);
-        if(!(lista === undefined)){
-            let song = lista.encontrarPorId(req.params.id2);
+    VerCancionPorIdLista : async (req, res) => {
+        let lista = await listaReproduccionRepository.encontrarPorId(req.params.id1);
+        if(!(lista == undefined)){
+            let song = await lista.encontrarPorId(req.params.id2);
 
-            if (!(song === undefined)) {
+            if (!(song == undefined)) {
                 res.json(song);
             } else {
                 res.sendStatus(404);
@@ -89,35 +100,38 @@ const ListaReproduccionController = {
         
     },
 
-    nuevaCancionALista : (req, res) => {
+    nuevaCancionALista : async (req, res) => {
 
         let comprobar = true;
 
-        let lista = listaReproduccionRepository.encontrarPorId(req.params.id1);
+        let lista = await listaReproduccionRepository.encontrarPorId(req.params.id1);
 
-        let song = cancionRepository.encontrarPorId(req.params.id2);
+        let song = await cancionRepository.encontrarPorId(req.params.id2);
 
-        console.log(song);
-
-        if(song === undefined || lista === undefined){
+        if(song == undefined || lista == undefined){
 
             res.sendStatus(404);
 
         } else {
 
-            console.log(lista.getCanciones);
-            if(lista.getCanciones.length > 0){
-                for(let i = 0; i < lista.getCanciones.length; i++){
-                    if(song.getId == lista.getCanciones[i].getId){
+            if(lista.canciones.length > 0){
+                for(let i = 0; i < lista.canciones.length; i++){
+                    if(song._id.equals(lista.canciones[i]._id)){
                         comprobar = false;
                     }
                 }
             }
 
-            console.log(comprobar);
-
             if(comprobar){
-                lista.getCanciones.push(song);
+                lista.canciones.push(song._id);
+
+                console.log(lista.canciones);
+                await listaReproduccionRepository.editarLista(req.params.id1, {
+                    name : lista.name,
+                    propietary : lista.propietary,
+                    description : lista.description,
+                    canciones : lista.canciones
+                });
                 res.sendStatus(200);
             } else {
                 res.sendStatus(400);
@@ -127,18 +141,29 @@ const ListaReproduccionController = {
         }
     },
 
-    eliminarCancionDeLista: (req, res) => {
-        let lista = listaReproduccionRepository.encontrarPorId(req.params.id1);
-
-        let song = cancionRepository.encontrarPorId(req.params.id2);
-        console.log(req.params.id1);
-        console.log(req.params.id2);
+    eliminarCancionDeLista: async (req, res) => {
+        let lista = await listaReproduccionRepository.encontrarPorId(req.params.id1);
 
         if(lista === undefined)
             res.sendStatus(404);
         
         else {
-            lista.getCanciones.splice(lista.encontrarPorId(song.getId));
+            lista.canciones.pull(req.params.id2);
+
+            await listaReproduccionRepository.editarLista(req.params.id1, {
+                name : lista.name,
+                propietary : lista.propietary,
+                description : lista.description,
+                canciones : lista.canciones
+            });
+
+            await listaReproduccionRepository.encontrarPorId(req.params.id, {
+                name : lista.name,
+                propietary : lista.propietary,
+                description : lista.description,
+                canciones : lista.canciones
+            });
+
             res.sendStatus(204);
         }
     }

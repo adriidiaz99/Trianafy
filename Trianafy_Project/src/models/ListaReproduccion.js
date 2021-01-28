@@ -1,3 +1,26 @@
+import mongoose from 'mongoose';
+const {
+    Schema
+} = mongoose;
+
+
+const ListaSchema = new Schema({
+    id: Number,
+    name: String,
+    description : Number,
+    propietary : String,
+    canciones : [{
+        type : mongoose.ObjectId,
+        ref : 'Cancion'
+    }]
+});
+
+export const ListaReproduccion = mongoose.model('ListaReproduccion', ListaSchema);
+
+/*
+    SI SE HUBIESE HECHO DE LA FORMA TRADICIONAL
+******************************************************
+
 export class ListaReproduccion{
 
 
@@ -61,4 +84,4 @@ export class ListaReproduccion{
         }
         return undefined;
     }
-}
+}*/

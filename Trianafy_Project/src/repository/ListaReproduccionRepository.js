@@ -1,4 +1,74 @@
-import { Cancion } from "../models/Cancion";
+import mongoose from 'mongoose';
+import { ListaReproduccion } from '../models/ListaReproduccion';
+const {
+    Schema
+} = mongoose;
+
+const listaReproduccionRepository = {
+
+    async encontrarTodos() {
+        return await ListaReproduccion
+            .find({})
+            .exec();
+    },
+
+    async encontrarPorId(id) {
+
+
+        return await ListaReproduccion
+            .findById(id)
+            .exec();
+
+    },
+
+    async agregarLista(nuevaLista) {
+        const lista = new ListaReproduccion({
+            name: nuevaLista.name,
+            description: nuevaLista.description,
+            propietary: nuevaLista.propietary,
+            canciones: nuevaLista.canciones
+        });
+
+        const result = await lista.save();
+        return result;
+    },
+
+    async editarPorId(id, listaModificada) {
+        const lista = await ListaReproduccion.findById(id);
+
+        if (lista == null) {
+            return undefined;
+        } else {
+            return await Object.assign(lista, listaModificada).save();
+        }
+    },
+
+    async editarLista(id, listaModificada) {
+        return await this.editarPorId(id, listaModificada);
+    },
+
+    async eliminarLista(id) {
+        await ListaReproduccion.findByIdAndRemove(id).exec();
+    }
+
+}
+
+export {
+    listaReproduccionRepository
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/*import { Cancion } from "../models/Cancion";
 import { ListaReproduccion } from "../models/ListaReproduccion";
 
 export class ListaReproduccionRepository{
@@ -72,4 +142,4 @@ export class ListaReproduccionRepository{
     }
 }
 
-export const listaReproduccionRepository = new ListaReproduccionRepository([new ListaReproduccion(1, "cedbcd", "cxndeknde", "cencke", [new Cancion(3, "cdeeef", 12, "dcec", "cdeced")])]);
+export const listaReproduccionRepository = new ListaReproduccionRepository([new ListaReproduccion(1, "cedbcd", "cxndeknde", "cencke", [])]);*/

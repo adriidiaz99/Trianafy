@@ -1,3 +1,68 @@
+import mongoose from 'mongoose';
+import { Cancion } from '../models/Cancion';
+const {
+    Schema
+} = mongoose;
+
+
+const cancionRepository = {
+
+    async encontrarTodos() {
+        return await Cancion
+            .find({})
+            .exec();
+    },
+
+    async encontrarPorId(id) {
+
+
+        return await Cancion
+            .findById(id)
+            .exec();
+
+    },
+
+    async agregarCancion(nuevaCancion) {
+        const cancion = new Cancion({
+            title: nuevaCancion.title,
+            year: nuevaCancion.year,
+            album: nuevaCancion.album,
+            artist: nuevaCancion.artist
+        });
+
+        const result = await cancion.save();
+        return result;
+    },
+
+    async editarPorId(id, cancionModificada) {
+        const cancion = await Cancion.findById(id);
+
+        if (cancion == null) {
+            return undefined;
+        } else {
+            return await Object.assign(cancion, cancionModificada).save();
+        }
+    },
+
+    async editarCancion(id, cancionModificada) {
+        return await this.editarPorId(id, cancionModificada);
+    },
+
+    async eliminarCancion(id) {
+        await Cancion.findByIdAndRemove(id).exec();
+    }
+
+}
+
+export {
+    cancionRepository
+}
+
+/*
+
+    SI SE HUBIESE HECHO DE LA FORMA TRADICIONAL
+*****************************************************
+
 import { Cancion } from "../models/Cancion";
 
 export class CancionRepository{
@@ -73,4 +138,4 @@ export class CancionRepository{
     }
 }
 
-export const cancionRepository = new CancionRepository([new Cancion(12, "Hola", 12, "Juanito mackandé", "Lola pop"), new Cancion(3, "cdeeef", 12, "dcec", "cdeced")]);
+export const cancionRepository = new CancionRepository([new Cancion(12, "Hola", 12, "Juanito mackandé", "Lola pop"), new Cancion(3, "cdeeef", 12, "dcec", "cdeced")]);*/

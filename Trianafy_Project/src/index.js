@@ -5,6 +5,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import morganBody from "morgan-body";
+import mongoose from "mongoose";
 
 // Imports de componentes del API
 import models from './models';
@@ -33,8 +34,17 @@ app.use('/songs', routes.songs);
 app.use('/lists', routes.listsOfSongs);
 app.use('/lists', routes.lists);
 
-app.listen(process.env.PORT, () =>
-  console.log(
-    `¡Aplicación de ejemplo escuchando en el puerto ${process.env.PORT}!`
-  )
-);
+mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true }, err => {
+  
+  if (err) {
+    console.log(`Error de conexión a la base de datos: ${JSON.stringify(err)}`);
+  } else {
+    console.log(`Conexión correcta a la base de datos en la URI ${process.env.DB_URI}`);
+    app.listen(process.env.PORT, () =>
+      console.log(
+        `¡Aplicación de ejemplo escuchando en el puerto ${process.env.PORT}!`
+      )
+    );
+  }
+
+});
