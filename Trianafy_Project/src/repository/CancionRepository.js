@@ -46,9 +46,14 @@ export class CancionRepository{
     }
 
     editarCancion(v1){
-        console.log(v1.getId);
-        this.listaCanciones[this.listaCanciones.indexOf(this.encontrarPorId(v1.getId))] = v1;
-        return this.listaCanciones[this.listaCanciones.indexOf(this.encontrarPorId(v1.getId))];
+
+        if(this.listaCanciones.indexOf(this.encontrarPorId(v1.getId)) == -1){
+            return undefined;
+        } else {
+            this.listaCanciones[this.listaCanciones.indexOf(this.encontrarPorId(v1.getId))] = v1;
+            return this.listaCanciones[this.listaCanciones.indexOf(this.encontrarPorId(v1.getId))];
+        }
+       
     }
 
     encontrarPorId(id){

@@ -1,8 +1,69 @@
 import { Cancion } from '../models/Cancion';
+import { ListaReproduccion } from '../models/ListaReproduccion';
 import { CancionRepository, cancionRepository } from '../repository/CancionRepository';
 import { ListaReproduccionRepository, listaReproduccionRepository } from '../repository/ListaReproduccionRepository';
 
 const ListaReproduccionController = {
+
+    nuevaLista : (req, res) => {
+
+        let nuevaLista = null;
+
+        if(req.body.name == null || req.body.name == undefined || req.body.name == ""){
+
+            res.status(400).send("Bad request");
+
+        } else {
+
+            nuevaLista = listaReproduccionRepository.agregarListaReproduccion(new ListaReproduccion(0, req.body.name, req.body.descripcion, req.body.propietary, req.body.canciones));
+            res.status(201).json(nuevaLista);
+
+        }
+    },
+
+    allList : (req, res) => {
+
+        if(listaReproduccionRepository.encontrarTodos().length > 0)
+            res.status(200).json(listaReproduccionRepository.encontrarTodos());
+        
+        else
+            res.sendStatus(404);
+    },
+
+    seeDescription : (req, res) => {
+
+        let lista = listaReproduccionRepository.encontrarPorId(req.params.id);
+
+        if(lista === undefined){
+            res.sendStatus(404);
+        } else {
+            res.json(lista);  
+        }
+
+
+    },
+
+    editarLista : (req, res) => {
+        let listaReproduccionModificada = listaReproduccionRepository.editarListaReproduccion(new ListaReproduccion(req.params.id, req.body.name, req.body.descripcion, req.body.propietary, req.body.canciones));
+        console.log(listaReproduccionRepository.editarListaReproduccion(new ListaReproduccion(req.params.id, req.body.name, req.body.descripcion, req.body.propietary, req.body.canciones)));
+        if(!(listaReproduccionModificada == undefined)){
+            res.sendStatus(204);
+        }
+        else {
+            console.log("/");
+            res.sendStatus(404);
+
+        }
+
+    },
+
+    eliminarLista: (req, res) => {
+        if(listaReproduccionRepository.eliminarListaReproduccion(req.params.id)){
+            res.sendStatus(204);
+        } else {
+            res.sendStatus(404);
+        }
+    },
 
 
     allSongsOfLista : (req, res) => {

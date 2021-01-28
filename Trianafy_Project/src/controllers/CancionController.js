@@ -1,12 +1,12 @@
 
 import { Cancion } from '../models/Cancion';
 import {CancionRepository, cancionRepository} from '../repository/CancionRepository';
+import mongoose from "mongoose";
 
 const CancionController = {
 
 
     allSongs : (req, res) => {
-        console.log(cancionRepository.encontrarTodos()[0]);
         res.json(cancionRepository.encontrarTodos());
     },
 
@@ -24,8 +24,6 @@ const CancionController = {
 
         let cancionCreada = null;
 
-        console.log(req.body);
-
         if(req.body.title == null || req.body.title == undefined || req.body.title == ""){
 
             res.status(400).send("Bad request");
@@ -38,7 +36,6 @@ const CancionController = {
     },
 
     editarCancion: (req, res) => {
-        console.log(req.params.id);
         let cancionModificada = cancionRepository.editarCancion(new Cancion(req.params.id, req.body.title, req.body.year, req.body.artist, req.body.album));
         if (cancionModificada == undefined)
             res.sendStatus(404);

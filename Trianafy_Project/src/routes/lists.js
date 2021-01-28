@@ -1,26 +1,17 @@
 import { Router } from 'express';
+import { ListaReproduccionController } from '../controllers/ListaReproduccionController';
 
 const router = Router();
 
-    router.get('/lists', (req, res) => {
-    //Contenido get
-    });
+    router.get('', ListaReproduccionController.allList);
 
-    router.post('/lists', (req, res) => {
-    //Contenido post
-    });
+    router.post('', ListaReproduccionController.nuevaLista);
 
-    router.put('/lists/{id}', (req, res) => {
-    //Contenido put
-    });
+    router.put('/:id', ListaReproduccionController.editarLista);
 
-    router.get('/lists/{id}', (req, res) => {
-    //Contenido get
-    });
+    router.get('/:id', ListaReproduccionController.seeDescription);
 
-    router.delete('/lists/{id}', (req, res) => {
-        //Contenido get
-    });
+    router.delete('/:id', ListaReproduccionController.eliminarLista);
 
 
 export default router;

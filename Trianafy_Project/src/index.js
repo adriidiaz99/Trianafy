@@ -31,7 +31,7 @@ morganBody(app);
 
 app.use('/songs', routes.songs);
 app.use('/lists', routes.listsOfSongs);
-app.use('/messages', routes.lists);
+app.use('/lists', routes.lists);
 
 app.listen(process.env.PORT, () =>
   console.log(
