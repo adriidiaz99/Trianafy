@@ -10,6 +10,7 @@ import mongoose from "mongoose";
 // Imports de componentes del API
 import models from './models';
 import routes from './routes';
+import passport from './services/passport';
 
 // Instanciación de la aplicación de Express
 const app = express();
@@ -17,6 +18,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(passport.initialize());
 
 app.use(morgan('dev'))
 morganBody(app);
@@ -33,6 +35,9 @@ morganBody(app);
 app.use('/songs', routes.songs);
 app.use('/lists', routes.listsOfSongs);
 app.use('/lists', routes.lists);
+app.use('/users' , routes.user);
+app.use('/auth', routes.auth);
+
 
 mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true }, err => {
   

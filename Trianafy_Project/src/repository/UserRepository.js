@@ -1,60 +1,109 @@
-export class UserRepository{
+import mongoose from 'mongoose';
+import { Usuario } from '../models/User';
+const {
+    Schema
+} = mongoose;
 
-    constructor(listaUsuario){
-        this.listaUsuario = listaUsuario
-    }
+const usuarioRepository = {
 
-    get getListaUsuario(){
-        return this.listaUsuario;
-    }
+    async encontrarTodos() {
+        return await Usuario
+            .find({})
+            .exec();
+    },
 
-    setListaUsuario(value){
-        this.listaUsuario = value;
-    }
+    async encontrarPorId(id) {
 
 
-    buscarUltimoId(){
+        return await Usuario
+            .findById(id)
+            .exec();
 
-        let ultimoId = 0;
+    },
 
-        this.listaUsuario.forEach(element => {
-            if(element.getId > ultimoId)
-                ultimoId = element.getId;
-        });
+    async encontrarPorUserName(username) {
 
-        if(ultimoId == 0)
-            return 1;
+        let lista = await Usuario.find({}).exec();
+        let usuario = undefined;
 
-        return ultimoId++;
-    }
+        if(lista.length > 0){
 
-    agregarUsuario(v1){
-        v1.setId(this.buscarUltimoId());
-        this.listaUsuario.push(v1);
-    }
-
-    eliminarUsuario(v1){
-        this.listaUsuario.splice(v1);
-    }
-
-    editarUsuario(v1){
-        this.listaUsuario[this.listaUsuario.indexOf(this.encontrarPorId(v1.getId))] = v1;
-    }
-
-    encontrarPorId(id){
-        if(this.listaUsuario.length > 0){
-            for(let i = 0; i < this.listaUsuario.length; i++){
-                if(id === this.listaUsuario[i].getId){
-                    return this.listaUsuario[i];
+            for(let i = 0 ; i < lista.length ; i++){
+                if(username == lista[i].username){
+                    usuario = lista[i];
                 }
             }
+
         }
-        return 0;
+
+        return usuario;
+
+    },
+
+    async emailExists(email){
+        let lista = await Usuario.find({}).exec();
+
+        if(lista.length > 0){
+
+            for(let i = 0 ; i < lista.length ; i++){
+                if(email == lista[i].email){
+                    return true;
+                }
+            }
+
+        }
+
+        return false;
+    },
+
+    async usernameExists(username){
+        let lista = await Usuario.find({}).exec();
+
+        if(lista.length > 0){
+
+            for(let i = 0 ; i < lista.length ; i++){
+                if(username == lista[i].username){
+                    return true;
+                }
+            }
+
+        }
+
+        return false;
+    },
+
+    async agregarUsuario(nuevoUsuario) {
+        const usuario = new Usuario({
+            username: nuevoUsuario.username,
+            fullname: nuevoUsuario.fullname,
+            password: nuevoUsuario.password,
+            email: nuevoUsuario.email
+        });
+
+        const result = await usuario.save();
+        return result;
+    },
+
+    async editarPorId(id, usuarioModificado) {
+        const usuario = await Usuario.findById(id);
+
+        if (usuario == null) {
+            return undefined;
+        } else {
+            return await Object.assign(usuario, usuarioModificado).save();
+        }
+    },
+
+    async editarUsuario(id, usuarioModificado) {
+        return await this.editarPorId(id, usuarioModificado);
+    },
+
+    async eliminarUsuario(id) {
+        await Usuario.findByIdAndRemove(id).exec();
     }
 
-    encontrarTodos(){
-        return this.listaUsuario;
-    }
 }
 
-export const userRepository = new UserRepository([]);
+export {
+    usuarioRepository
+}

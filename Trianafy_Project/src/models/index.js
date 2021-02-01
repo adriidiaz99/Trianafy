@@ -1,9 +1,9 @@
 import ListaReproduccion from './ListaReproduccion';
 import Cancion from './Cancion';
-import User from './User';
+import Usuario from './User';
 
 export default{
     ListaReproduccion,
     Cancion,
-    User
+    Usuario
 }
