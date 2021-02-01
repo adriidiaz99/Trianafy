@@ -78,14 +78,16 @@ const ListaReproduccionController = {
 
 
     allSongsOfLista : async (req, res) => {
-        console.log(listaReproduccionRepository.encontrarPorId(req.params.id));
-        res.json(listaReproduccionRepository.encontrarPorId(req.params.id));
+
+        let canciones = await listaReproduccionRepository.encontrarPorId(req.params.id);
+
+        res.json(canciones.canciones);
     },
 
     VerCancionPorIdLista : async (req, res) => {
         let lista = await listaReproduccionRepository.encontrarPorId(req.params.id1);
         if(!(lista == undefined)){
-            let song = await lista.encontrarPorId(req.params.id2);
+            let song = await cancionRepository.encontrarPorId(req.params.id2);
 
             if (!(song == undefined)) {
                 res.json(song);
@@ -124,8 +126,7 @@ const ListaReproduccionController = {
 
             if(comprobar){
                 lista.canciones.push(song._id);
-
-                console.log(lista.canciones);
+                
                 await listaReproduccionRepository.editarLista(req.params.id1, {
                     name : lista.name,
                     propietary : lista.propietary,

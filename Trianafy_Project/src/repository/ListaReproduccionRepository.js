@@ -8,7 +8,7 @@ const listaReproduccionRepository = {
 
     async encontrarTodos() {
         return await ListaReproduccion
-            .find({})
+            .find({}).populate("canciones")
             .exec();
     },
 
@@ -16,7 +16,7 @@ const listaReproduccionRepository = {
 
 
         return await ListaReproduccion
-            .findById(id)
+            .findById(id).populate("canciones")
             .exec();
 
     },

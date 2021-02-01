@@ -1,6 +1,8 @@
 
-import { Cancion } from '../models/Cancion';
-import {CancionRepository, cancionRepository} from '../repository/CancionRepository';
+//PARA EMPLEAR MODO TRADICIONAL : import { Cancion } from '../models/Cancion';
+import { ListaReproduccion } from '../models/ListaReproduccion';
+import {cancionRepository} from '../repository/CancionRepository';
+import {listaReproduccionRepository} from '../repository/ListaReproduccionRepository';
 
 
 const CancionController = {
@@ -13,8 +15,7 @@ const CancionController = {
 
     cancionPorId : async (req, res) => {
         let song = await cancionRepository.encontrarPorId(req.params.id);
-
-        console.log(song);
+        
         if (song != undefined) {
             res.json(song);
         } else {
@@ -50,6 +51,7 @@ const CancionController = {
             year: req.body.year,
             artist : req.body.artist
         });
+
         if (cancionModificada == undefined)
             res.sendStatus(404);
         else   
@@ -57,7 +59,30 @@ const CancionController = {
     },
 
     eliminarCancion: async (req, res) => {
-        await cancionRepository.eliminarCancion(req.params.id)
+        await cancionRepository.eliminarCancion(req.params.id);
+
+        let lengthAnterior = 0;
+
+        let listas = await listaReproduccionRepository.encontrarTodos();
+
+        for(let i = 0; i < listas.length; i++){
+
+            lengthAnterior = listas[i].canciones.length;
+
+            for(let j = 0; j < listas[i].canciones.length; j++){
+                if(lengthAnterior > listas[i].canciones.length){
+                    j = 0;
+                    lengthAnterior = listas[i].canciones.length;
+                }
+                if(listas[i].canciones[j]._id.equals(req.params.id)){
+                    listas[i].canciones.splice(listas[i].canciones.indexOf(listas[i].canciones[j]), 1);
+                }
+            }
+
+            await listaReproduccionRepository.editarLista(listas[i]._id, listas[i]);
+        }
+
+
         res.sendStatus(204);
     }
 }

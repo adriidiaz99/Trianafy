@@ -45,8 +45,6 @@ passport.use('token', new JwtStrategy(opts, async (jwt_payload, done)=>{
 export const password = () => (req, res, next) =>
     passport.authenticate('local', {session: false}, (err, user, info) => {
 
-        console.log(user);
-
         if (err)
             return res.status(400).json(err);
 

@@ -15,8 +15,6 @@ const AuthController = {
                 email : req.body.email, 
                 fullname : req.body.fullname, 
                 password : bcrypt.hashSync(req.body.password, parseInt(process.env.BCRYPT_ROUNDS))}));
-
-        console.log(usuarioCreado.id);
            
         res.status(201).json({
             id: usuarioCreado.id,

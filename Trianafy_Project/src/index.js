@@ -8,7 +8,6 @@ import morganBody from "morgan-body";
 import mongoose from "mongoose";
 
 // Imports de componentes del API
-import models from './models';
 import routes from './routes';
 import passport from './services/passport';
 
