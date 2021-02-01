@@ -21,4 +21,6 @@ La BBDD creará en la conexión a MongoDb *Una nueva colección gracias al /BBDD
 
 ## Debemos registrarnos y logearnos para adquirir un token en la API y poder hacer uso de ella.
 
+### Debemos de ejecutar dentro de la carpeta trianafy_project el comando npm i para adquirir las carpetas node_module
+
 > Hecho por Adrián Díaz.
