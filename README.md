@@ -19,8 +19,13 @@ La BBDD creará en la conexión a MongoDb *Una nueva colección gracias al /BBDD
 
 ## *Debemos de comprobar toda la API con Postman (Como recomendación).* 
 
-## Debemos registrarnos y logearnos para adquirir un token en la API y poder hacer uso de ella.
+#### Debemos registrarnos y logearnos para adquirir un token en la API y poder hacer uso de ella.
 
-### Debemos de ejecutar dentro de la carpeta trianafy_project el comando npm i para adquirir las carpetas node_module
+#### Debemos de ejecutar dentro de la carpeta trianafy_project el comando npm i para adquirir las carpetas node_module.
+
+#### Para cargar datos de ejemplo, iniciar la route "localhost:nPort/init" con toda la base de datos vacía.
+
+
+
 
 > Hecho por Adrián Díaz.
