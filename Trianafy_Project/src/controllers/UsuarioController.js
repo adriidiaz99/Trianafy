@@ -2,6 +2,8 @@ import {
     User, Usuario
 } from '../models/User';
 
+import bcrypt from 'bcryptjs';
+
 
 import { usuarioRepository } from '../repository/UserRepository';
 
@@ -31,7 +33,7 @@ const UserController = {
             new Usuario({   username : req.body.username, 
                 email : req.body.email, 
                 fullname : req.body.fullname, 
-                password : req.body.password}));
+                password : bcrypt.hashSync(req.body.password, parseInt(process.env.BCRYPT_ROUNDS))}));
         res.status(201).json(usuarioCreado);
     },
 

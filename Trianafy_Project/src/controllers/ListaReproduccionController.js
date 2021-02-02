@@ -86,10 +86,17 @@ const ListaReproduccionController = {
 
     VerCancionPorIdLista : async (req, res) => {
         let lista = await listaReproduccionRepository.encontrarPorId(req.params.id1);
+        let comprobar = false;
         if(!(lista == undefined)){
             let song = await cancionRepository.encontrarPorId(req.params.id2);
 
-            if (!(song == undefined)) {
+            for(let i = 0; i < lista.canciones.length; i++){
+                if(lista.canciones[i]._id.equals(song.id)){
+                    comprobar = true;
+                }
+            }
+
+            if (comprobar) {
                 res.json(song);
             } else {
                 res.sendStatus(404);
@@ -118,7 +125,7 @@ const ListaReproduccionController = {
 
             if(lista.canciones.length > 0){
                 for(let i = 0; i < lista.canciones.length; i++){
-                    if(song._id.equals(lista.canciones[i]._id)){
+                    if(song._id.equals(lista.canciones[i].id)){
                         comprobar = false;
                     }
                 }

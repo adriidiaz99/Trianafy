@@ -6,7 +6,7 @@ const router = Router();
 
     router.get('', token(), ListaReproduccionController.allList);
 
-    router.post('',token(), ListaReproduccionController.nuevaLista);
+    router.post('',token(),  ListaReproduccionController.nuevaLista);
 
     router.put('/:id',token(), ListaReproduccionController.editarLista);
 

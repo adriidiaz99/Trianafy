@@ -38,6 +38,4 @@ router.post('/',[
 
 router.put('/:id',token(), UserController.editarUsuario);
 
-router.delete('/:id',token(), UserController.eliminarUsuario);
-
 export default router;

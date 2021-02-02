@@ -18,7 +18,7 @@ router.post('/register', [
             } else
                 return true;
         }),
-    body('password').isLength({min: 8}).withMessage('La contraseña debe tener como mínimoo 8 caracteres'),
+    body('password').isLength({min: 8}).withMessage('La contraseña debe tener como mínimo 8 caracteres'),
     body('email')
         .isEmail()
         .withMessage('El campo email debe ser un email válido')
