@@ -5,10 +5,10 @@ const {
 
 
 const ListaSchema = new Schema({
-    id: Number,
     name: String,
-    description : Number,
-    propietary : String,
+    description : String,
+    propietary : { type: mongoose.ObjectId,
+                    ref: 'Usuario'},
     canciones : [{
         type : mongoose.ObjectId,
         ref : 'Cancion'

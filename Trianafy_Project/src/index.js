@@ -36,6 +36,7 @@ app.use('/lists', routes.listsOfSongs);
 app.use('/lists', routes.lists);
 app.use('/users' , routes.user);
 app.use('/auth', routes.auth);
+app.use('/init', routes.init);
 
 
 mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true }, err => {

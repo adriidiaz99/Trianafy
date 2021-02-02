@@ -8,7 +8,7 @@ const listaReproduccionRepository = {
 
     async encontrarTodos() {
         return await ListaReproduccion
-            .find({}).populate("canciones")
+            .find({}).populate("canciones").populate({path : "propietary", select : 'username'})
             .exec();
     },
 
